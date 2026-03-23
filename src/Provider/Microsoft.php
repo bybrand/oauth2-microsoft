@@ -70,6 +70,14 @@ class Microsoft extends AbstractProvider
     }
 
     /**
+     * Microsoft identity platform expects scopes separated by spaces.
+     */
+    protected function getScopeSeparator(): string
+    {
+        return ' ';
+    }
+
+    /**
      * Check a provider response for errors.
      *
      * @throws IdentityProviderException

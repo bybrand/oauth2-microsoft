@@ -53,6 +53,22 @@ final class MicrosoftTest extends TestCase
         );
     }
 
+    public function testAuthorizationUrlUsesSpaceSeparatedScopes(): void
+    {
+        $provider = new TestableMicrosoft([
+            'clientId' => 'client-id',
+            'clientSecret' => 'client-secret',
+            'redirectUri' => 'https://example.com/callback',
+        ]);
+
+        $authorizationUrl = $provider->getAuthorizationUrl();
+        $query = [];
+        parse_str(parse_url($authorizationUrl, PHP_URL_QUERY) ?? '', $query);
+
+        $this->assertArrayHasKey('scope', $query);
+        $this->assertSame('openid profile email User.Read', $query['scope']);
+    }
+
     public function testCheckResponseDoesNothingForSuccessfulResponseWithoutError(): void
     {
         $provider = new TestableMicrosoft();
